@@ -36,6 +36,8 @@ times = ['08:00-09:00', '09:00-10:00', '10:00-11:00', '11:00-12:00', '12:00-13:0
 st.subheader(translate(language, "Select your Availability", "Sélectionnez votre Disponibilité"))
 st.write('Please select all available days and times / Veuillez sélectionner tous les jours et heures disponibles')
 
+st.dataframe(data=db)
+
 with st.form("Schedule", clear_on_submit=True):
     # monday = st.multiselect(translate(language, 'Monday', 'Lundi'), times)
     tuesday = st.multiselect(translate(language, 'Tuesday', 'Mardi'), times)
