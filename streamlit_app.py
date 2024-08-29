@@ -71,6 +71,6 @@ with st.form("Schedule", clear_on_submit=True):
             with open("database.pkl", "wb") as db_file:
                 pickle.dump(db, db_file)
 
-            st.dataframe(data=db)
+            # st.dataframe(data=db)
 
             st.success(translate(language, 'Availability submitted!', 'Disponibilité envoyée!'))
