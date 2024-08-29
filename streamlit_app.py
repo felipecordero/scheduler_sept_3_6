@@ -1,12 +1,13 @@
 import streamlit as st
 import pandas as pd
 import pickle
+import json
 
 try:
     with open("database.pkl", "rb") as db_file:
-        db = pickle.load(db_file)
+        db:dict = pickle.load(db_file)
 except:
-    db = {}
+    db:dict = {}
     with open("database.pkl", "wb") as db_file:
         pickle.dump(db, db_file)
 
@@ -67,6 +68,10 @@ with st.form("Schedule", clear_on_submit=True):
             # append_data_to_sheet(sheet, data)
 
             db[studentNumber] = data['info']
+
+            # Convert and write JSON object to file
+            with open("database.json", "w") as outfile: 
+                json.dump(db, outfile)
 
             with open("database.pkl", "wb") as db_file:
                 pickle.dump(db, db_file)
