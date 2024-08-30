@@ -9,7 +9,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import json
 
-credentials.Certificate()
+# credentials.Certificate()
 
 
 
