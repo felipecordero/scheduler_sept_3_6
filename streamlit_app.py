@@ -1,20 +1,10 @@
 import streamlit as st
-import pandas as pd
-import pickle
-import json
-from datetime import datetime
-import tomllib
 
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-import json
-
-# credentials.Certificate()
-
 
 def init_firestore():
-
     # Inicializar la aplicación de Firebase
     cred = credentials.Certificate(st.secrets["lasalleDB"].to_dict())
     if not firebase_admin._apps:
@@ -50,7 +40,6 @@ with st.form("Schedule", clear_on_submit=True):
 
     # Número do Estudante
     studentNumber = st.text_input(translate(language, "Your Student Number", "Votre No étudiant"))
-    # monday = st.multiselect(translate(language, 'Monday', 'Lundi'), times)
     tuesday = st.multiselect(translate(language, 'Tuesday', 'Mardi'), times)
     wednesday = st.multiselect(translate(language, 'Wednesday', 'Mercredi'), times)                
     thursday = st.multiselect(translate(language, 'Thursday', 'Jeudi'), times)             
@@ -64,11 +53,11 @@ with st.form("Schedule", clear_on_submit=True):
             data = {
                 "studentID": studentNumber,
                 "info": {
-                    "name":    name,
-                    "tuesday":    tuesday,
-                    "wednesday":    wednesday,
-                    "thursday":    thursday,
-                    "friday":    friday
+                    "name": name,
+                    "tuesday": tuesday,
+                    "wednesday": wednesday,
+                    "thursday": thursday,
+                    "friday": friday
                 }
             }
 
