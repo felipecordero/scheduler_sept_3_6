@@ -2,14 +2,22 @@ import streamlit as st
 import pandas as pd
 import pickle
 import json
+from datetime import datetime
 
-try:
-    with open("database.pkl", "rb") as db_file:
-        db:dict = pickle.load(db_file)
-except:
-    db:dict = {}
-    with open("database.pkl", "wb") as db_file:
-        pickle.dump(db, db_file)
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+import json
+
+def init_firestore():
+
+    # Inicializar la aplicación de Firebase
+    cred = credentials.Certificate('credentials.json')
+    if not firebase_admin._apps:
+        firebase_admin.initialize_app(cred)
+    return firestore.client()
+
+db = init_firestore()
 
 # Função para traduzir
 def translate(language, en_text, fr_text):
@@ -24,21 +32,20 @@ st.title('Scheduler For September 3 to 6')
 # Seleção de Idioma
 language = st.selectbox('Choose your language / Choisissez votre langue', ['English', 'Français'])
 
-# Nome do Usuário
-name = st.text_input(translate(language, "Your Name", "Votre Nom"))
-
-# Número do Estudante
-studentNumber = st.text_input(translate(language, "Your Student Number", "Votre No étudiant"))
-
 times = ['08:00-09:00', '09:00-10:00', '10:00-11:00', '11:00-12:00', '12:00-13:00', '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00']
 
 # Disponibilidade
 st.subheader(translate(language, "Select your Availability", "Sélectionnez votre Disponibilité"))
 st.write('Please select all available days and times / Veuillez sélectionner tous les jours et heures disponibles')
 
-st.dataframe(data=db)
+# st.dataframe(data=db)
 
 with st.form("Schedule", clear_on_submit=True):
+    # Nome do Usuário
+    name = st.text_input(translate(language, "Your Name", "Votre Nom"))
+
+    # Número do Estudante
+    studentNumber = st.text_input(translate(language, "Your Student Number", "Votre No étudiant"))
     # monday = st.multiselect(translate(language, 'Monday', 'Lundi'), times)
     tuesday = st.multiselect(translate(language, 'Tuesday', 'Mardi'), times)
     wednesday = st.multiselect(translate(language, 'Wednesday', 'Mercredi'), times)                
@@ -50,10 +57,6 @@ with st.form("Schedule", clear_on_submit=True):
         if not name or not studentNumber:
             st.error(translate(language, "Please provide your Name and Student Number.", "Veuillez fournir votre Nom et Numéro d'étudiant."))
         else:
-            # Conectar ao Google Sheets
-            # sheet = connect_to_gsheets()
-
-            # Dados para o Google Sheets
             data = {
                 "studentID": studentNumber,
                 "info": {
@@ -66,18 +69,7 @@ with st.form("Schedule", clear_on_submit=True):
                 }
             }
 
-            # Adicionar os dados ao Google Sheets
-            # append_data_to_sheet(sheet, data)
-
-            db[studentNumber] = data['info']
-
-            # Convert and write JSON object to file
-            with open("database.json", "w") as outfile: 
-                json.dump(db, outfile)
-
-            with open("database.pkl", "wb") as db_file:
-                pickle.dump(db, db_file)
-
-            st.dataframe(data=db)
+            doc_ref = db.collection("week_sept_3_6").document(studentNumber)
+            doc_ref.set(data["info"])
 
             st.success(translate(language, 'Availability submitted!', 'Disponibilité envoyée!'))
