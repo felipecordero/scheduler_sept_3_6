@@ -9,6 +9,10 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import json
 
+credentials.Certificate()
+
+
+
 def init_firestore():
 
     # Inicializar la aplicación de Firebase
