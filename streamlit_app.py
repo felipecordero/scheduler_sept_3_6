@@ -16,7 +16,8 @@ import json
 def init_firestore():
 
     # Inicializar la aplicación de Firebase
-    cred = credentials.Certificate('credentials.json')
+    # cred = credentials.Certificate('credentials.json')
+    cred = credentials.Certificate(st.secrets["database"])
     if not firebase_admin._apps:
         firebase_admin.initialize_app(cred)
     return firestore.client()
