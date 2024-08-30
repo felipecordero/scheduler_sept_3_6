@@ -16,11 +16,6 @@ import json
 def init_firestore():
 
     # Inicializar la aplicación de Firebase
-    # cred = credentials.Certificate('credentials.json')
-    # print(st.secrets["lasalleDB"])
-    print(type(st.secrets["lasalleDB"]))
-    print(st.secrets["lasalleDB"].to_dict())
-    # print(firestore_cred)
     cred = credentials.Certificate(st.secrets["lasalleDB"].to_dict())
     if not firebase_admin._apps:
         firebase_admin.initialize_app(cred)
@@ -69,8 +64,7 @@ with st.form("Schedule", clear_on_submit=True):
             data = {
                 "studentID": studentNumber,
                 "info": {
-                    "studentNumber":    name,
-                    # "monday":    monday,
+                    "name":    name,
                     "tuesday":    tuesday,
                     "wednesday":    wednesday,
                     "thursday":    thursday,
