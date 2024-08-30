@@ -3,6 +3,7 @@ import pandas as pd
 import pickle
 import json
 from datetime import datetime
+import tomllib
 
 import firebase_admin
 from firebase_admin import credentials
@@ -12,12 +13,15 @@ import json
 # credentials.Certificate()
 
 
-
 def init_firestore():
 
     # Inicializar la aplicación de Firebase
     # cred = credentials.Certificate('credentials.json')
-    cred = credentials.Certificate(st.secrets["database"])
+    # print(st.secrets["lasalleDB"])
+    print(type(st.secrets["lasalleDB"]))
+    print(st.secrets["lasalleDB"].to_dict())
+    # print(firestore_cred)
+    cred = credentials.Certificate(st.secrets["lasalleDB"].to_dict())
     if not firebase_admin._apps:
         firebase_admin.initialize_app(cred)
     return firestore.client()
